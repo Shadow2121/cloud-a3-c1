@@ -49,7 +49,7 @@ app.post('/store-file', async (req, res) => {
       
 
   } catch (error) {
-      console.error('Error storing file:', error);
+      console.error('Error storing file: ', error);
       res.status(500).json({ file: req.body ? req.body.file : null, error: "Error while storing the file to the storage." });
   }
 });
