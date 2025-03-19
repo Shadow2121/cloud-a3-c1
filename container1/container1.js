@@ -34,7 +34,7 @@ app.post('/store-file', async (req, res) => {
 
       console.log('Received data:  ', data);
       const filePath = path.join(FILE_DIRECTORY, file);
-      console.log('Attempting to write to file path: ', filePath);
+      console.log('Attempting to write to file path:  ', filePath);
 
       let newData = data?.replaceAll(" ", "") || data;
 
