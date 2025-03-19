@@ -32,7 +32,7 @@ app.post('/store-file', async (req, res) => {
           return res.status(400).json({ file: file, error: "Missing 'data' in JSON input." });
       }
 
-      console.log('Received data:', data);
+      console.log('Received data:  ', data);
       const filePath = path.join(FILE_DIRECTORY, file);
       console.log('Attempting to write to file path:', filePath);
 
