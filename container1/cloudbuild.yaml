@@ -2,21 +2,21 @@ steps:
   # Debugging Step
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'debug-ls'
-    entrypoint: 'powershell'
+    entrypoint: 'bash'
     args:
-      - '-Command'
+      - '-c'
       - |
-        Write-Host "Current directory:"
-        Get-Location
-        Write-Host "Contents of current directory:"
-        Get-ChildItem -Path . -Force
-        Write-Host "Contents of container1 directory:"
-        Get-ChildItem -Path ./container1 -Force
+        echo "Current directory:"
+        pwd
+        echo "Contents of current directory:"
+        ls -la
+        echo "Contents of container1 directory:"
+        ls -la ./container1
   
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1', '.']
 
-  - name: 'gce.io/cloud-builders/docker'
+  - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1']
 
   # Authenticate with Kubernetes
