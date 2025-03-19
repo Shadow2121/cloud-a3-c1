@@ -14,10 +14,10 @@ steps:
         ls -la ./container1
   
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1', './container1']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1:$SHORT_SHA', './container1']
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1']
+    args: ['push', 'us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1:$SHORT_SHA']
 
   # Authenticate with Kubernetes
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -34,6 +34,11 @@ steps:
   # Deploy to Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'k8s/deployment.yaml']
+
+  # Force the pods to restart with the new image (using the unique tag)
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['set', 'image', 'deployment/c1-deployment', 'container1=us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1:$SHORT_SHA']
+
 
 images:
   - 'us-central1-docker.pkg.dev/cloud-assignment3-454119/cloud-a3/shadow1069/cloud-container1'
