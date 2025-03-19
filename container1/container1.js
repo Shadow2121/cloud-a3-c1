@@ -74,20 +74,27 @@ app.post('/calculate', async (req, res) => {
         });
       }
 
-    const response2 = await axios.post('http://c2-service:8000/process', { 
-      file: file,
-      product: product 
-    }); 
-
-    if(response2.status == 200) {
-
-      // 4. Return response from container 2
-      res.json(response2.data);
+      try {
+        // Send request to Container 2
+        const response = await axios.post('http://c2-service:8000/process', { file, product });
+        res.json(response.data);
+        console.log(res+"81");
+    } catch (error) {
+        // Check if the error has a response from the server
+        if (error.response) {
+            // Server responded with an error status
+            return res.status(error.response.status).json(error.response.data);
+        } else {
+            // Connection error or other issues
+            return res.status(500).json({ file, error: 'Internal server error: ' + error.message });
+        }
     }
 
   } catch (error) {
     console.error('Error:', error);
-    res.status(error.status).json(error.response);
+    res.status(error.response?.status || 500).json(error.response?.data || {
+      error: "Internal server error."
+    });
   }
 });
 
